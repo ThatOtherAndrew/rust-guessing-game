@@ -1,5 +1,6 @@
 use std::cmp::Ordering;
 use std::io;
+use std::process::exit;
 use rand::Rng;
 
 
@@ -13,7 +14,20 @@ fn main() {
         io::stdin()
             .read_line(&mut guess)
             .expect("Failed to read line!");
-        let guess: u32 = guess.trim().parse().expect("Invalid input number!");
+
+        let message = guess.trim().to_lowercase();
+        if message == "exit" || message == "quit" {
+            println!("Exiting program");
+            exit(0);
+        }
+
+        let guess: u32 = match guess.trim().parse() {
+            Ok(number) => number,
+            Err(_) => {
+                println!("Invalid guess!");
+                continue;
+            }
+        };
 
         println!("You guessed {}...", guess);
 
